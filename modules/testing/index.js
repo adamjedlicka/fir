@@ -44,6 +44,7 @@ export const makeProject = async (config, callback) => {
 
         return new Promise(async (resolve) => {
           const watcher = chokidar.watch(joined, { ignoreInitial: true }).on('all', async () => {
+            setTimeout(() => resolve(), 1000)
             await watcher.close()
             resolve()
           })
