@@ -1,0 +1,9 @@
+{
+  "name": "@fir-js/vue",
+  "type": "module",
+  "dependencies": {
+    "@vitejs/plugin-vue": "^2.3.2",
+    "vite": "*",
+    "vue": "^3.2.33"
+  }
+}

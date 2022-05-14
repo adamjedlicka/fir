@@ -1,0 +1,8 @@
+{
+  "name": "@fir-js/vue-pinia",
+  "type": "module",
+  "dependencies": {
+    "pinia": "^2.0.14",
+    "vue": "*"
+  }
+}

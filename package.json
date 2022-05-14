@@ -1,0 +1,25 @@
+{
+  "name": "fir-js",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@3.2.0",
+  "workspaces": [
+    "./modules/*",
+    "./demo/"
+  ],
+  "scripts": {
+    "test": "playwright test",
+    "demo:dev": "yarn workspace demo dev",
+    "demo:build": "yarn workspace demo build",
+    "demo:serve": "yarn workspace demo serve"
+  },
+  "dependencies": {
+    "@fir-js/core": "*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.21.1",
+    "prettier": "^2.6.2"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@fir-js/testing",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "dependencies": {
+    "get-port": "^6.1.2"
+  }
+}

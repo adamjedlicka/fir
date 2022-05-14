@@ -1,0 +1,8 @@
+{
+  "name": "@fir-js/vue-router",
+  "type": "module",
+  "dependencies": {
+    "vue": "*",
+    "vue-router": "^4.0.15"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@fir-js/core",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "fir": "fir.js"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "compression": "^1.7.4",
+    "devalue": "^2.0.1",
+    "ejs": "^3.1.7",
+    "express": "^4.18.1",
+    "minimist": "^1.2.6",
+    "node-fetch": "^3.2.4",
+    "open": "^8.4.0",
+    "rollup": "*",
+    "rollup-plugin-visualizer": "^5.6.0",
+    "vite": "^2.9.8",
+    "youch": "^3.2.0"
+  }
+}
