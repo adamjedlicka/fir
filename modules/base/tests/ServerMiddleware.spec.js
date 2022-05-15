@@ -85,7 +85,7 @@ test('Overriding', async ({ page }) => {
   )
 })
 
-test('HMR does not affect overriding', async ({ page }) => {
+test.only('HMR does not affect overriding', async ({ page }) => {
   await makeProject(
     {
       packages: [
@@ -113,10 +113,19 @@ test('HMR does not affect overriding', async ({ page }) => {
       ],
     },
     async ({ get, writeFile }) => {
-      await writeFile('a/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
+      try {
+        console.log('A')
+        await writeFile('a/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
+        console.log('B')
 
-      const { text } = await get(page, '/')
-      expect(text).toContain('B')
+        const { text } = await get(page, '/')
+        console.log('C')
+        expect(text).toContain('B')
+        console.log('B')
+      } catch (e) {
+        console.error(e)
+        expect(true).toBe(false)
+      }
     },
   )
 })
