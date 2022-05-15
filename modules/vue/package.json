@@ -2,7 +2,7 @@
   "name": "@fir-js/vue",
   "type": "module",
   "dependencies": {
-    "@vitejs/plugin-vue": "^2.3.2",
+    "@vitejs/plugin-vue": "^2.3.3",
     "vite": "*",
     "vue": "^3.2.33"
   }

@@ -19,7 +19,7 @@
     "@fir-js/core": "*"
   },
   "devDependencies": {
-    "@playwright/test": "^1.21.1",
+    "@playwright/test": "^1.22.0",
     "prettier": "^2.6.2"
   }
 }
