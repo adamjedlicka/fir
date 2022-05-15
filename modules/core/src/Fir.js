@@ -28,6 +28,7 @@ export class Fir {
     await this.clearFirDir()
 
     await this.loadModules()
+
     await this.loadConcepts()
 
     for (const concept of this.concepts) {

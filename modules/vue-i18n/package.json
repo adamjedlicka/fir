@@ -1,0 +1,10 @@
+{
+  "name": "@fir-js/vue-i18n",
+  "type": "module",
+  "dependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^3.4.0",
+    "vite": "*",
+    "vue": "*",
+    "vue-i18n": "^9.1.10"
+  }
+}

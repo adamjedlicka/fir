@@ -35,7 +35,7 @@ export class Serve extends Fir {
   }
 
   async _loadMiddleware(server) {
-    for (const middleware of Object.values(await import(join(this.firDir, 'serve', 'middleware.js')))) {
+    for (const middleware of Object.values(await import(join(this.firDir, 'server', 'middleware.js')))) {
       server.use(middleware)
     }
   }

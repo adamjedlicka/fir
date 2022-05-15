@@ -1,19 +1,35 @@
-import { isRef, toRef, useSSRContext } from 'vue'
+import { isRef, reactive, toRef, useSSRContext } from 'vue'
 import type { Ref } from 'vue'
 
+let _reactiveState = null
+
 export const useState = <T>(key: string, init?: () => T | Ref<T>): Ref<T> => {
-  const payload = getPayload()
+  let _state
 
-  if (!payload.state) payload.state = {}
+  //@ts-ignore
+  if (import.meta.env.SSR) {
+    const ssrContext = useSSRContext()
 
-  const state = toRef(payload.state, key)
+    if (!ssrContext.payload.state) ssrContext.payload.state = reactive({})
+
+    _state = ssrContext.payload.state
+  } else {
+    if (!_reactiveState) {
+      //@ts-ignore
+      _reactiveState = reactive(window.$payload.state ?? {})
+    }
+
+    _state = _reactiveState
+  }
+
+  const state = toRef(_state, key)
 
   if (state.value === undefined && init) {
     const initialValue = init()
 
     if (isRef(initialValue)) {
       // vue will unwrap the ref for us
-      payload.state[key] = initialValue
+      _state[key] = initialValue
       return initialValue as Ref<T>
     }
 
@@ -21,16 +37,4 @@ export const useState = <T>(key: string, init?: () => T | Ref<T>): Ref<T> => {
   }
 
   return state
-}
-
-const getPayload = () => {
-  // @ts-ignore
-  if (import.meta.env.SSR) {
-    const ssrContext = useSSRContext()
-
-    return ssrContext.payload
-  } else {
-    // @ts-ignore
-    return window.$payload ?? {}
-  }
 }

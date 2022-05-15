@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises'
+import { readdir, access } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { createRequire } from 'node:module'
 
@@ -35,13 +35,17 @@ export class Module {
   }
 
   async getViteConfig() {
-    try {
-      const { default: viteConfig } = await import(this.joinPath('vite.config.js'))
+    const path = this.joinPath('vite.config.js')
 
-      return viteConfig
+    try {
+      await access(path)
     } catch {
       return {}
     }
+
+    const { default: viteConfig } = await import(path)
+
+    return viteConfig
   }
 
   get name() {
