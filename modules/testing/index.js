@@ -42,14 +42,18 @@ export const makeProject = async (config, callback) => {
       writeFile: (_path, _content) => {
         const joined = path.join(dir, _path)
 
-        return new Promise(async (resolve) => {
-          const watcher = chokidar.watch(joined, { ignoreInitial: true }).on('all', async () => {
-            setTimeout(() => resolve(), 1000)
-            await watcher.close()
-            resolve()
-          })
+        return new Promise(async (resolve, reject) => {
+          try {
+            const watcher = chokidar.watch(joined, { ignoreInitial: true }).on('all', async () => {
+              setTimeout(() => resolve(), 1000)
+              await watcher.close()
+              resolve()
+            })
 
-          await writeFile(joined, _content)
+            await writeFile(joined, _content)
+          } catch (err) {
+            reject(err)
+          }
         })
       },
       rm: (_path) => fs.rm(path.join(dir, _path), { recursive: true }),
