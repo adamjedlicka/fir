@@ -40,30 +40,23 @@ export const makeProject = async (config, callback) => {
       server,
       url,
       writeFile: (_path, _content) => {
-        console.log('a')
         const joined = path.join(dir, _path)
-        console.log('b', joined)
 
         return new Promise(async (resolve, reject) => {
           try {
-            console.log('c')
             const watcher = chokidar.watch(joined, { ignoreInitial: true }).on('all', async () => {
-              console.log('d')
-              setTimeout(() => resolve(), 1000)
-              console.log('e')
               await watcher.close()
-              console.log('f')
               resolve()
-              console.log('g')
             })
 
-            console.log('h')
             await writeFile(joined, _content)
-            console.log('i')
+
+            setTimeout(async () => {
+              await watcher.close()
+              resolve()
+            }, 250)
           } catch (err) {
-            console.log('j')
             reject(err)
-            console.log('k')
           }
         })
       },
