@@ -1,7 +1,6 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import getPort from 'get-port'
-import chokidar from 'chokidar'
 import { Dev } from '@fir-js/core'
 
 export const makeProject = async (config, callback) => {
@@ -36,31 +35,13 @@ export const makeProject = async (config, callback) => {
     const url = `http://localhost:${port}`
 
     await callback({
-      app,
-      server,
       url,
-      writeFile: (_path, _content) => {
-        const joined = path.join(dir, _path)
-
-        return new Promise(async (resolve) => {
-          const watcher = chokidar.watch(joined, { ignoreInitial: true }).on('all', async () => {
-            await watcher.close()
-            resolve()
-          })
-
-          await writeFile(joined, _content)
-        })
+      writeFile: async (_path, _content) => {
+        await writeFile(path.join(dir, _path), _content)
+        // TODO: Find better way
+        await new Promise((resolve) => setTimeout(resolve, 100))
       },
       rm: (_path) => fs.rm(path.join(dir, _path), { recursive: true }),
-      get: async (page, path) => {
-        const location = url + path
-
-        const [response] = await Promise.all([fetch(location), page.goto(location)])
-
-        const text = await response.text()
-
-        return { text }
-      },
     })
 
     await server.close()

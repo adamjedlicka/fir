@@ -75,8 +75,8 @@ test('it transfers state', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      await get(page, '/')
+    async ({ url }) => {
+      await page.goto(url)
       await expect(page.locator('#app')).toContainText('1')
     },
   )
@@ -132,8 +132,8 @@ test('it supports serverInit', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      await get(page, '/')
+    async ({ url }) => {
+      await page.goto(url)
       await expect(page.locator('#app')).toContainText('100')
     },
   )

@@ -1,9 +1,12 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { createRequire } from 'node:module'
 import express from 'express'
 import { createServer } from 'vite'
 import Youch from 'youch'
 import { Fir } from './Fir.js'
+
+const require = createRequire(import.meta.url)
 
 export class Dev extends Fir {
   async createServer() {

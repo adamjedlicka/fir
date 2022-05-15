@@ -20,7 +20,9 @@ test('it transfers state', async ({ page }) => {
                 // TODO: Import
                 import { useState } from '@fir-js/vue/index';
 
-                const count = useState('count', () => Math.round(Math.random() * 1000))
+                const count = useState('count')
+
+                if (import.meta.env.SSR) count.value++
                 </script>
               `,
             },
@@ -28,9 +30,9 @@ test('it transfers state', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      const { text } = await get(page, '/')
-      await expect(page.locator('#app')).toContainText(text.match(/<div>(.+?)<\/div>/)[1])
+    async ({ url }) => {
+      await page.goto(url)
+      await expect(page.locator('#app')).toContainText('1')
     },
   )
 })

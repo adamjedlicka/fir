@@ -6,10 +6,9 @@ test('it works', async ({ page }) => {
     {
       packages: ['@fir-js/base', '@fir-js/vue'],
     },
-    async ({ get }) => {
-      const { text } = await get(page, '/')
-      expect(text).toContain('Hello, Fir!')
-      await expect(page.locator('#app')).toContainText('Hello, Fir!')
+    async ({ url }) => {
+      await page.goto(url + '/')
+      await expect(await page.content()).toContain('Hello, Fir!')
     },
   )
 })
@@ -32,10 +31,9 @@ test('it allows overriding App.vue', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      const { text } = await get(page, '/')
-      expect(text).toContain('Hello, App!')
-      await expect(page.locator('#app')).toContainText('Hello, App!')
+    async ({ url }) => {
+      await page.goto(url + '/')
+      expect(await page.content()).toContain('Hello, App!')
     },
   )
 })
@@ -58,16 +56,15 @@ test('it allows HMR App.vue', async ({ page }) => {
         ],
       ],
     },
-    async ({ get, writeFile }) => {
+    async ({ url, writeFile }) => {
       await writeFile('app/fir/templates/App.vue', `<template><h1>Hello, B!</h1></template>`)
-      const { text } = await get(page, '/')
-      expect(text).toContain('Hello, B!')
-      await expect(page.locator('#app')).toContainText('Hello, B!')
+      await page.goto(url + '/')
+      await expect(await page.content()).toContain('Hello, B!')
     },
   )
 })
 
-test.slow('it supports reactivity', async ({ page }) => {
+test('it supports reactivity', async ({ page }) => {
   await makeProject(
     {
       packages: [
@@ -93,8 +90,8 @@ test.slow('it supports reactivity', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      await get(page, '/')
+    async ({ url }) => {
+      await page.goto(url + '/')
       await page.locator('button').click()
       await page.locator('button').click()
       await page.locator('button').click()
