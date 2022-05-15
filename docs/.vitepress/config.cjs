@@ -9,4 +9,4 @@ const config = {
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
 }
 
-export default config
+module.exports = config
