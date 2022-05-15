@@ -19,8 +19,8 @@ test('Basic middleware', async ({ page }) => {
       ],
     },
     async ({ get }) => {
-      const { text } = await get(page, '/')
-      expect(text).toContain('Hello, middleware!')
+      await get(page, '/')
+      expect(await page.content()).toContain('Hello, middleware!')
     },
   )
 })
@@ -45,8 +45,8 @@ test('HMR', async ({ page }) => {
     async ({ get, writeFile }) => {
       await writeFile('a/server/middleware/hello.js', `export default (req, res) => res.send('B')`)
 
-      const { text } = await get(page, '/')
-      expect(text).toContain('B')
+      await get(page, '/')
+      expect(await page.content()).toContain('B')
     },
   )
 })
@@ -79,8 +79,8 @@ test('Overriding', async ({ page }) => {
       ],
     },
     async ({ get }) => {
-      const { text } = await get(page, '/')
-      expect(text).toContain('B')
+      await get(page, '/')
+      expect(await page.content()).toContain('B')
     },
   )
 })
@@ -115,8 +115,8 @@ test('HMR does not affect overriding', async ({ page }) => {
     async ({ get, writeFile }) => {
       await writeFile('a/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
 
-      const { text } = await get(page, '/')
-      expect(text).toContain('B')
+      await get(page, '/')
+      expect(await page.content()).toContain('B')
     },
   )
 })
@@ -151,8 +151,8 @@ test('HMR can affect overriding', async ({ page }) => {
     async ({ get, writeFile }) => {
       await writeFile('b/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
 
-      const { text } = await get(page, '/')
-      expect(text).toContain('C')
+      await get(page, '/')
+      expect(await page.content()).toContain('C')
     },
   )
 })

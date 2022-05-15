@@ -60,8 +60,7 @@ test('it allows HMR App.vue', async ({ page }) => {
     },
     async ({ get, writeFile }) => {
       await writeFile('app/fir/templates/App.vue', `<template><h1>Hello, B!</h1></template>`)
-      const { text } = await get(page, '/')
-      expect(text).toContain('Hello, B!')
+      await get(page, '/')
       await expect(page.locator('#app')).toContainText('Hello, B!')
     },
   )
