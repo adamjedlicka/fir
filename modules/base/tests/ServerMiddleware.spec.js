@@ -129,7 +129,7 @@ test('HMR does not affect overriding', async ({ page }) => {
   )
 })
 
-test.slow('HMR can affect overriding', async ({ page }) => {
+test('HMR can affect overriding', async ({ page }) => {
   await makeProject(
     {
       packages: [
@@ -165,6 +165,55 @@ test.slow('HMR can affect overriding', async ({ page }) => {
           return await response.text()
         })
         .toContain('C')
+    },
+  )
+})
+
+test('removing files works with HMR', async ({ page }) => {
+  await makeProject(
+    {
+      packages: [
+        '@fir-js/base',
+        [
+          'a',
+          {
+            server: {
+              middleware: {
+                'hello.js': `export default (req, res) => res.send('A')`,
+              },
+            },
+          },
+        ],
+        [
+          'b',
+          {
+            server: {
+              middleware: {
+                'empty.js': `export default (req, res, next) => next()`,
+              },
+            },
+          },
+        ],
+      ],
+    },
+    async ({ url, writeFile, rm }) => {
+      await writeFile('b/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
+
+      await expect
+        .poll(async () => {
+          const response = await page.request.get(url + '/')
+          return await response.text()
+        })
+        .toContain('C')
+
+      await rm('b/server/middleware/hello.js')
+
+      await expect
+        .poll(async () => {
+          const response = await page.request.get(url + '/')
+          return await response.text()
+        })
+        .toContain('A')
     },
   )
 })

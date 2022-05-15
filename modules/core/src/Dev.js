@@ -1,12 +1,11 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { createRequire } from 'node:module'
+import {} from 'node:crypto'
 import express from 'express'
 import { createServer } from 'vite'
 import Youch from 'youch'
+import chokidar from 'chokidar'
 import { Fir } from './Fir.js'
-
-const require = createRequire(import.meta.url)
 
 export class Dev extends Fir {
   async createServer() {
@@ -67,15 +66,20 @@ export class Dev extends Fir {
   async _loadMiddleware(server) {
     const router = express.Router()
 
-    router.use(async (req, res, next) => {
-      // Remove all current middleware except this one
-      router.stack.splice(1)
+    const path = join(this.firDir, 'server', 'middleware.js')
 
-      for (const middleware of Object.values(await import(join(this.firDir, 'server', 'middleware.js')))) {
+    for (const middleware of Object.values(await import(path))) {
+      router.use(middleware)
+    }
+
+    const watcher = chokidar.watch(path)
+
+    watcher.on('change', async () => {
+      router.stack.splice(0)
+
+      for (const middleware of Object.values(await import(path + '?hash=' + Math.random().toString().slice(2)))) {
         router.use(middleware)
       }
-
-      next()
     })
 
     server.use(router)

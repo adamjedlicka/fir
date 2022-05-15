@@ -4,4 +4,8 @@ export default class Middleware extends GeneratingConcept {
   get directory() {
     return 'server/middleware'
   }
+
+  get executesOnChanges() {
+    return true
+  }
 }

@@ -1,5 +1,6 @@
 import { dirname, join, relative } from 'node:path'
-import { writeFile } from 'node:fs/promises'
+import { writeFile, readFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 
 export class Concept {
   constructor(fir) {
@@ -18,6 +19,12 @@ export class Concept {
 
   getRelativePathForFile(module, file) {
     return relative(join(this.fir.firDir, dirname(this.directory)), module.joinPath(this.directory, file))
+  }
+
+  async getHashForFile(module, file) {
+    const content = await readFile(module.joinPath(this.directory, file), { encoding: 'utf-8' })
+
+    return createHash('md5').update(content).digest('hex').toString()
   }
 
   async renderTemplate(template, data) {

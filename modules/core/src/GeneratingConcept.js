@@ -1,4 +1,5 @@
 import ejs from 'ejs'
+import { Dev } from './Dev.js'
 import { OverridingConcept } from './OverridingConcept.js'
 
 export class GeneratingConcept extends OverridingConcept {
@@ -15,6 +16,10 @@ export class GeneratingConcept extends OverridingConcept {
       const ident = file.replace(/\..+$/, '')
 
       records[ident] = this.getRelativePathForFile(module, file)
+
+      if (this.fir instanceof Dev) {
+        records[ident] += `?hash=${await this.getHashForFile(module, file)}`
+      }
     }
 
     await this.renderTemplate(this.compiledTemplate, { records })
