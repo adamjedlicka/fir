@@ -11,9 +11,6 @@
   ],
   "scripts": {
     "test": "playwright test",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs",
     "demo:dev": "yarn workspace demo dev",
     "demo:build": "yarn workspace demo build",
     "demo:serve": "yarn workspace demo serve"
@@ -23,7 +20,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.21.1",
-    "prettier": "^2.6.2",
-    "vitepress": "^0.22.4"
+    "prettier": "^2.6.2"
   }
 }
