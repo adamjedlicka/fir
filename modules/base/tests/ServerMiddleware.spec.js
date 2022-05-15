@@ -18,9 +18,9 @@ test('Basic middleware', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      await get(page, '/')
-      expect(await page.content()).toContain('Hello, middleware!')
+    async ({ url }) => {
+      await page.goto(url + '/')
+      await expect(await page.content()).toContain('Hello, middleware!')
     },
   )
 })
@@ -42,11 +42,15 @@ test('HMR', async ({ page }) => {
         ],
       ],
     },
-    async ({ get, writeFile }) => {
+    async ({ url, writeFile }) => {
       await writeFile('a/server/middleware/hello.js', `export default (req, res) => res.send('B')`)
 
-      await get(page, '/')
-      expect(await page.content()).toContain('B')
+      await expect
+        .poll(async () => {
+          const response = await page.request.get(url + '/')
+          return await response.text()
+        })
+        .toContain('B')
     },
   )
 })
@@ -78,8 +82,8 @@ test('Overriding', async ({ page }) => {
         ],
       ],
     },
-    async ({ get }) => {
-      await get(page, '/')
+    async ({ url }) => {
+      await page.goto(url + '/')
       expect(await page.content()).toContain('B')
     },
   )
@@ -112,16 +116,20 @@ test('HMR does not affect overriding', async ({ page }) => {
         ],
       ],
     },
-    async ({ get, writeFile }) => {
+    async ({ url, writeFile }) => {
       await writeFile('a/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
 
-      await get(page, '/')
-      expect(await page.content()).toContain('B')
+      await expect
+        .poll(async () => {
+          const response = await page.request.get(url + '/')
+          return await response.text()
+        })
+        .toContain('B')
     },
   )
 })
 
-test('HMR can affect overriding', async ({ page }) => {
+test.slow('HMR can affect overriding', async ({ page }) => {
   await makeProject(
     {
       packages: [
@@ -148,11 +156,15 @@ test('HMR can affect overriding', async ({ page }) => {
         ],
       ],
     },
-    async ({ get, writeFile }) => {
+    async ({ url, writeFile }) => {
       await writeFile('b/server/middleware/hello.js', `export default (req, res) => res.send('C')`)
 
-      await get(page, '/')
-      expect(await page.content()).toContain('C')
+      await expect
+        .poll(async () => {
+          const response = await page.request.get(url + '/')
+          return await response.text()
+        })
+        .toContain('C')
     },
   )
 })
