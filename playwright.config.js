@@ -4,7 +4,7 @@
 const config = {
   globalSetup: './tests/globalSetup.js',
   globalTeardown: './tests/globalTeardown.js',
-  workers: 1,
+  retries: 3,
 }
 
 export default config

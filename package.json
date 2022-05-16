@@ -11,9 +11,9 @@
   ],
   "scripts": {
     "test": "playwright test",
-    "demo:dev": "yarn workspace demo dev",
-    "demo:build": "yarn workspace demo build",
-    "demo:serve": "yarn workspace demo serve"
+    "dev": "fir dev",
+    "build": "fir build",
+    "serve": "fir serve"
   },
   "dependencies": {
     "@fir-js/core": "*"

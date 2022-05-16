@@ -18,6 +18,13 @@ export const makeProject = async (config, callback) => {
 
         return `./${pkg[0]}`
       }),
+      vite: {
+        server: {
+          hmr: {
+            port: await getPort(),
+          },
+        },
+      },
     })
 
     await dev.bootstrap()
@@ -36,11 +43,7 @@ export const makeProject = async (config, callback) => {
 
     await callback({
       url,
-      writeFile: async (_path, _content) => {
-        await writeFile(path.join(dir, _path), _content)
-        // TODO: Find better way
-        await new Promise((resolve) => setTimeout(resolve, 100))
-      },
+      writeFile: (_path, _content) => writeFile(path.join(dir, _path), _content),
       rm: (_path) => fs.rm(path.join(dir, _path), { recursive: true }),
     })
 

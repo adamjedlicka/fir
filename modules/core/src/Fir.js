@@ -11,9 +11,12 @@ export class Fir {
   constructor(firConfig = {}) {
     this.firConfig = firConfig
 
-    this.viteConfig = defineConfig({
-      cacheDir: join(this.rootDir, '.vite'),
-    })
+    this.viteConfig = mergeConfig(
+      defineConfig({
+        cacheDir: join(this.firDir, '.vite'),
+      }),
+      firConfig.vite ?? {},
+    )
 
     this.closeHandlers = []
 

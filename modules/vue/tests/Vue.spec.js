@@ -7,7 +7,7 @@ test('it works', async ({ page }) => {
       packages: ['@fir-js/base', '@fir-js/vue'],
     },
     async ({ url }) => {
-      await page.goto(url + '/')
+      await page.goto(url, { waitUntil: 'networkidle' })
       await expect(await page.content()).toContain('Hello, Fir!')
     },
   )
@@ -32,8 +32,8 @@ test('it allows overriding App.vue', async ({ page }) => {
       ],
     },
     async ({ url }) => {
-      await page.goto(url + '/')
-      expect(await page.content()).toContain('Hello, App!')
+      await page.goto(url, { waitUntil: 'networkidle' })
+      await expect(await page.content()).toContain('Hello, App!')
     },
   )
 })
@@ -58,7 +58,7 @@ test('it allows HMR App.vue', async ({ page }) => {
     },
     async ({ url, writeFile }) => {
       await writeFile('app/fir/templates/App.vue', `<template><h1>Hello, B!</h1></template>`)
-      await page.goto(url + '/')
+      await page.goto(url, { waitUntil: 'networkidle' })
       await expect(await page.content()).toContain('Hello, B!')
     },
   )
@@ -91,7 +91,7 @@ test('it supports reactivity', async ({ page }) => {
       ],
     },
     async ({ url }) => {
-      await page.goto(url + '/')
+      await page.goto(url, { waitUntil: 'networkidle' })
       await page.locator('button').click()
       await page.locator('button').click()
       await page.locator('button').click()
